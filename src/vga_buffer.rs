@@ -140,13 +140,13 @@ pub fn _print(args: fmt::Arguments) {
 }
 
 #[macro_export]
-macro_rules!  println {
+macro_rules!  println{
     () => (print!("\n"));
     ($($arg:tt)*) => (print!("{}\n", format_args!($($arg)*)));
 }
 
 #[macro_export]
-macro_rules!  {
+macro_rules!  print{
     ($($arg:tt)*) => {
         ($crate::vga_buffer::_print(format_args!($($arg)*)));
     };
