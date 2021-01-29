@@ -1,3 +1,6 @@
+// use harness flag
+// both default testrunner and custom testrunner are disabled
+// go directly with _start
 #![no_std]
 #![no_main]
 
@@ -27,7 +30,7 @@ pub fn test_runner(tests: &[&dyn Fn()]) {
         exit_qemu(QemuExitCode::Failed);
     }
     exit_qemu(QemuExitCode::Success);
-}
+}   
 fn should_fail() {
     serial_print!("should_panic::should_fail...\t");
     assert_eq!(0, 1);
