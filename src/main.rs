@@ -18,9 +18,12 @@ pub extern "C" fn _start() -> ! {
 
     println!("Hello World{}", "!");
 
+    blog_os_workspace::init();
+
     #[cfg(test)]
     test_main();
 
+    println!("This shoud crashed");
     loop {}
 }
 
