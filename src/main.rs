@@ -20,6 +20,7 @@ pub extern "C" fn _start() -> ! {
 
     blog_os_workspace::init();
 
+
     #[cfg(test)]
     test_main();
 
