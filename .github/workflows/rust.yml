@@ -13,15 +13,8 @@ jobs:
         with:
             toolchain: nightly
             override: true
-            components: rust-src, llvm-tools-preview-x86_64-unknown-linux-gnu, rustfmt-x86_64-unknown-linux-gnu, clippy-x86_64-unknown-linux-gnu, cargo-x86_64-unknown-linux-gnu
+            components: rust-src, llvm-tools-preview-x86_64-unknown-linux-gnu
 
-      # `cargo check` command here will use installed `nightly`
-      # as it is set as an "override" for current directory
-
-      - name: Run cargo check
-        uses: actions-rs/cargo@v1
-        with:
-          command: check
       - name: Install QEMU
         run: sudo apt-get install qemu qemu-system-x86
       
