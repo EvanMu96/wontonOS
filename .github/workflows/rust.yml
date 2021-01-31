@@ -12,8 +12,9 @@ jobs:
         uses: actions-rs/toolchain@v1
         with:
             toolchain: nightly
+            target: x86_64-unknown-linux-gnu
             override: true
-            components: rust-src, llvm-tools-preview-x86_64-unknown-linux-gnu
+            components: rust-src, llvm-tools-preview
 
       - name: Install QEMU
         run: sudo apt-get install qemu qemu-system-x86
