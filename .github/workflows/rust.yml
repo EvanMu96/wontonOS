@@ -22,7 +22,9 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: check
-          
+      - name: Install QEMU
+        run: sudo apt-get install qemu qemu-system-x86
+      
       - name: Install Bootimage
         run: cargo install bootimage
       
