@@ -24,8 +24,8 @@ pub extern "C" fn _start() -> ! {
     #[cfg(test)]
     test_main();
 
-    println!("This shoud crashed");
-    loop {}
+    println!("It works fine.");
+    blog_os_workspace::hlt_loop();
 }
 
 // write a user-define panic handler when use no_std
@@ -34,7 +34,7 @@ pub extern "C" fn _start() -> ! {
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
     println!("{}", info);
-    loop {}
+    blog_os_workspace::hlt_loop();
 }
 
 // our panic handler in test mode
