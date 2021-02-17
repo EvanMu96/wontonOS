@@ -9,6 +9,8 @@ use x86_64::{
     VirtAddr,
 };
 
+pub mod bump;
+
 pub struct Dummy;
 
 unsafe impl GlobalAlloc for Dummy {
