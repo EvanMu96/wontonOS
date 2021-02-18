@@ -1,4 +1,5 @@
 // use lib as external crate
+#![feature(const_mut_refs)]
 #![feature(alloc_error_handler)] 
 #![no_std]
 #![cfg_attr(test, no_main)]
