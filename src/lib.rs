@@ -1,4 +1,6 @@
 // use lib as external crate
+#![feature(const_mut_refs)]
+#![feature(alloc_error_handler)] 
 #![no_std]
 #![cfg_attr(test, no_main)]
 #![feature(custom_test_frameworks)]
@@ -8,10 +10,14 @@
 
 use core::panic::PanicInfo;
 
+extern crate alloc;
+
 pub mod serial;
 pub mod vga_buffer;
 pub mod interrupts;
 pub mod gdt;
+pub mod memory;
+pub mod allocator;
 
 pub fn init() {
     gdt::init();
@@ -85,4 +91,9 @@ pub extern "C" fn _start() -> ! {
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
     test_panic_handler(info)
+}
+
+#[alloc_error_handler]
+fn alloc_error_handler(layout: alloc::alloc::Layout) -> ! {
+    panic!("allocation error: {:?}", layout)
 }
