@@ -2,11 +2,8 @@ use core::u64;
 use x86_64::structures::idt::{InterruptStackFrame, InterruptDescriptorTable, PageFaultErrorCode};
 use lazy_static::lazy_static;
 use pic8259_simple::ChainedPics;
-use spin;
 use crate::{print, println, hlt_loop};
 use crate::gdt::DOUBLE_FAULT_IST_INDEX;
-
-
 
 
 // primary secondary
@@ -79,25 +76,14 @@ extern "x86-interrupt" fn timer_interrupt_handler (_stack_frame: &mut InterruptS
 
 extern "x86-interrupt" fn keyboard_interrupt_handler( _stack_frame: &mut InterruptStackFrame) {
     use x86_64::instructions::port::Port;
-    use pc_keyboard::{layouts, DecodedKey, HandleControl, Keyboard, ScancodeSet1};
-    use spin::Mutex;
-
-    lazy_static! {
-        static ref KEYBOARD: Mutex<Keyboard<layouts::Us104Key, ScancodeSet1>> = 
-            Mutex::new(Keyboard::new(layouts::Us104Key, ScancodeSet1, HandleControl::Ignore));
-    }
-    let mut keyboard = KEYBOARD.lock();
+    
     // PS/2
     let mut port = Port::new(0x60);
     let scancode: u8 = unsafe { port.read() };
-    if let Ok(Some(key_event)) = keyboard.add_byte(scancode) {
-        if let Some(key) = keyboard.process_keyevent(key_event) {
-            match key {
-                DecodedKey::Unicode(character) => print!("{}", character),
-                DecodedKey::RawKey(key) => print!("{:?}", key),
-            }
-        }
-    }
+    
+    // push to scancode queue and finish the intr immediately
+    crate::task::keyboard::add_scancode(scancode);
+    
     // exit
     unsafe {
         PICS.lock().notify_end_of_interrupt(InterruptIndex::Keyboard.as_u8());

@@ -12,12 +12,22 @@ use bootloader::{BootInfo, entry_point};
 use x86_64::VirtAddr;
 use x86_64::structures::paging::Page;
 use alloc::{boxed::Box, vec, vec::Vec, rc::Rc};
+use blog_os_workspace::task::{Task, simple_executor::SimpleExecutor, keyboard};
 
 entry_point!(kernal_main);
 
 #[test_case]
 fn trivial_assertion() {
     assert_eq!(1, 1);
+}
+
+async fn async_number() -> u32 {
+    42
+}
+
+async fn example_task() {
+    let number = async_number().await;
+    println!("async the ultimate numer: {}", number);
 }
 
 fn kernal_main(boot_info: &'static BootInfo) -> ! {
@@ -63,6 +73,11 @@ fn kernal_main(boot_info: &'static BootInfo) -> ! {
     println!("current reference count is {}", Rc::strong_count(&cloned_reference));
     core::mem::drop(reference_counted);
     println!("reference count is {} now", Rc::strong_count(&cloned_reference));
+
+    let mut executor = SimpleExecutor::new();
+    executor.spawn(Task::new(example_task()));
+    executor.spawn(Task::new(keyboard::print_keypresses())); // spawn a task for keyboard event
+    executor.run();
 
     #[cfg(test)]
     test_main();
