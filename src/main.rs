@@ -12,7 +12,7 @@ use bootloader::{BootInfo, entry_point};
 use x86_64::VirtAddr;
 use x86_64::structures::paging::Page;
 use alloc::{boxed::Box, vec, vec::Vec, rc::Rc};
-use blog_os_workspace::task::{Task, simple_executor::SimpleExecutor, keyboard};
+use blog_os_workspace::task::{Task, executor, keyboard};
 
 entry_point!(kernal_main);
 
@@ -74,16 +74,16 @@ fn kernal_main(boot_info: &'static BootInfo) -> ! {
     core::mem::drop(reference_counted);
     println!("reference count is {} now", Rc::strong_count(&cloned_reference));
 
-    let mut executor = SimpleExecutor::new();
-    executor.spawn(Task::new(example_task()));
-    executor.spawn(Task::new(keyboard::print_keypresses())); // spawn a task for keyboard event
-    executor.run();
-
     #[cfg(test)]
     test_main();
 
     println!("It works fine.");
-    blog_os_workspace::hlt_loop();
+    let mut executor = executor::Executor::new();
+    executor.spawn(Task::new(example_task()));
+    executor.spawn(Task::new(keyboard::print_keypresses())); // spawn a task for keyboard event
+    executor.run();
+    
+    //blog_os_workspace::hlt_loop();
 }
 
 // write a user-define panic handler when use no_std
