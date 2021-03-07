@@ -3,7 +3,6 @@ use alloc::{collections::BTreeMap, sync::Arc, task::Wake};
 use core::task::Waker;
 use core::task::{Context, Poll};
 use crossbeam_queue::ArrayQueue;
-use crate::println;
 
 static QUEUE_SIZE: usize = 100;
 
@@ -57,7 +56,6 @@ impl Executor {
             panic!("task with duplicated ID already in tasks")
         }
         self.task_queue.push(task_id).expect("queue full");
-        println!("task_queue {}", self.task_queue.len());
     }
 
     fn run_ready_tasks(&mut self) {
@@ -68,12 +66,11 @@ impl Executor {
             waker_cache,
         } = self;
 
-        // println!("task_queu on poll size: {}", task_queue.len());
         while let Ok(task_id) = task_queue.pop() {
             let task = match tasks.get_mut(&task_id) {
                 Some(task) => task,
                 None => continue,
-            };
+            }; 
 
             let waker = waker_cache.entry(task_id)
                 .or_insert_with(|| TaskWaker::new(task_id, task_queue.clone()));
@@ -81,7 +78,6 @@ impl Executor {
             let mut context = Context::from_waker(waker);
             match task.poll(&mut context) {
                 Poll::Ready(()) => {
-                    println!("Poll Ready");
                     tasks.remove(&task_id);
                     waker_cache.remove(&task_id);
                 }
