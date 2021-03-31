@@ -6,7 +6,13 @@ A repo to learn Rust and basic OSDev.
 
 To build this naive operating system, your should install the lastest nightly rust toolchain, including rust-src and llvm-tools-preview components.
 
-To check your current rust version, you can use command
+```bash
+> rustup toochain install nightly
+> rustup component add rust-src
+> rustup component add llvm-tools-preview
+```
+
+To check your current rust toolchain type and version, you can use command
 
 ```bash
 > rustc -Vv
