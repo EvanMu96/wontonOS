@@ -1,4 +1,5 @@
 # blog_os_workspace
+[![test](https://github.com/EvanMu96/blog_os_workspace/actions/workflows/rust.yml/badge.svg)](https://github.com/EvanMu96/blog_os_workspace/actions/workflows/rust.yml)
 ## Introduction
 A repo to learn Rust and basic OSDev.  
 
