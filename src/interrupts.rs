@@ -1,7 +1,7 @@
 use core::u64;
 use x86_64::structures::idt::{InterruptStackFrame, InterruptDescriptorTable, PageFaultErrorCode};
 use lazy_static::lazy_static;
-use pic8259_simple::ChainedPics;
+use pic8259::ChainedPics;
 use crate::{print, println, hlt_loop};
 use crate::gdt::DOUBLE_FAULT_IST_INDEX;
 
@@ -58,15 +58,15 @@ pub fn init_idt() {
 // int3 breakpoint exception
 // commonly used in debugger
 // details: https://eli.thegreenplace.net/2011/01/27/how-debuggers-work-part-2-breakpoints
-extern "x86-interrupt" fn breakpoint_handler(stack_frame: &mut InterruptStackFrame) {
+extern "x86-interrupt" fn breakpoint_handler(stack_frame: InterruptStackFrame) {
     println!("EXCEPTION: BREAKPOINT\n{:#?}", stack_frame);
 }
 
-extern "x86-interrupt" fn double_fault_handler(stack_frame: &mut InterruptStackFrame, _error_code: u64) -> ! {
+extern "x86-interrupt" fn double_fault_handler(stack_frame: InterruptStackFrame, _error_code: u64) -> ! {
     panic!("EXCEPTION: DOUBLE FAULT\n{:#?}", stack_frame);
 }
 
-extern "x86-interrupt" fn timer_interrupt_handler (_stack_frame: &mut InterruptStackFrame) {
+extern "x86-interrupt" fn timer_interrupt_handler (_stack_frame: InterruptStackFrame) {
     print!(".");
     // exit manually
     unsafe {
@@ -74,7 +74,7 @@ extern "x86-interrupt" fn timer_interrupt_handler (_stack_frame: &mut InterruptS
     }
 }
 
-extern "x86-interrupt" fn keyboard_interrupt_handler( _stack_frame: &mut InterruptStackFrame) {
+extern "x86-interrupt" fn keyboard_interrupt_handler( _stack_frame: InterruptStackFrame) {
     use x86_64::instructions::port::Port;
     
     // PS/2
@@ -91,7 +91,7 @@ extern "x86-interrupt" fn keyboard_interrupt_handler( _stack_frame: &mut Interru
 }
 
 extern "x86-interrupt" fn page_fault_handler(
-    stack_frame: &mut InterruptStackFrame,
+    stack_frame: InterruptStackFrame,
     error_code: PageFaultErrorCode,
 ) {
     use x86_64::registers::control::Cr2;

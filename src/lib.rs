@@ -1,5 +1,4 @@
 // use lib as external crate
-#![feature(wake_trait)]
 #![feature(const_mut_refs)]
 #![feature(alloc_error_handler)] 
 #![no_std]
