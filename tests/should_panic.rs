@@ -6,7 +6,7 @@
 
 
 use core::panic::PanicInfo;
-use blog_os_workspace::{QemuExitCode, exit_qemu, serial_println, serial_print};
+use wontonOS::{QemuExitCode, exit_qemu, serial_println, serial_print};
 
 #[panic_handler]
 fn panic(_info: &PanicInfo) -> ! {

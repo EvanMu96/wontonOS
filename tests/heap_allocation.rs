@@ -3,7 +3,7 @@
 #![no_std]
 #![no_main]
 #![feature(custom_test_frameworks)]
-#![test_runner(blog_os_workspace::test_runner)]
+#![test_runner(wontonOS::test_runner)]
 #![reexport_test_harness_main = "test_main"]
 
 extern crate alloc;
@@ -14,11 +14,11 @@ use core::panic::PanicInfo;
 entry_point!(main);
 
 fn main(boot_info: &'static BootInfo) -> ! {
-    use blog_os_workspace::allocator;
-    use blog_os_workspace::memory::{self, BootInfoFrameAllocator};
+    use wontonOS::allocator;
+    use wontonOS::memory::{self, BootInfoFrameAllocator};
     use x86_64::VirtAddr;
 
-    blog_os_workspace::init();
+    wontonOS::init();
     let phys_mem_offset = VirtAddr::new(boot_info.physical_memory_offset);
     let mut mapper = unsafe { memory::init(phys_mem_offset) };
     let mut frame_allocator = unsafe {
@@ -33,7 +33,7 @@ fn main(boot_info: &'static BootInfo) -> ! {
 
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
-    blog_os_workspace::test_panic_handler(info)
+    wontonOS::test_panic_handler(info)
 }
 
 #[test_case]
@@ -59,7 +59,7 @@ fn large_vec() {
 fn many_boxes() {
     // allocate all heap memory
     use alloc::boxed::Box;
-    use blog_os_workspace::allocator::HEAP_SIZE;
+    use wontonOS::allocator::HEAP_SIZE;
     let mut piece_size = 0;
 
     while piece_size < HEAP_SIZE {

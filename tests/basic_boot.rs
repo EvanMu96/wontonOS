@@ -1,7 +1,7 @@
 #![no_std]
 #![no_main]
 #![feature(custom_test_frameworks)]
-#![test_runner(blog_os_workspace::test_runner)]
+#![test_runner(wontonOS::test_runner)]
 #![reexport_test_harness_main = "test_main"]
 
 use core::panic::PanicInfo;
@@ -15,10 +15,10 @@ pub extern "C" fn _start() -> ! {
 
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
-    blog_os_workspace::test_panic_handler(info)
+    wontonOS::test_panic_handler(info)
 }
 
-use blog_os_workspace::println;
+use wontonOS::println;
 
 #[test_case]
 fn test_println() {

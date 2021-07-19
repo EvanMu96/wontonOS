@@ -1,5 +1,5 @@
 [package]
-name = "blog_os_workspace"
+name = "wontonOS"
 version = "0.1.1"
 authors = ["EvanMu96 <senevan@foxmail.com>"]
 edition = "2018"

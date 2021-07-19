@@ -4,15 +4,15 @@
 #![no_main]
 
 use core::panic::PanicInfo;
-use blog_os_workspace::serial_print;
+use wontonOS::serial_print;
 use lazy_static::lazy_static;
 use x86_64::structures::idt::InterruptDescriptorTable;
-use blog_os_workspace::{exit_qemu, QemuExitCode, serial_println};
+use wontonOS::{exit_qemu, QemuExitCode, serial_println};
 use x86_64::structures::idt::InterruptStackFrame;
 
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
-    blog_os_workspace::test_panic_handler(info)
+    wontonOS::test_panic_handler(info)
 }
 
 extern "x86-interrupt" fn test_double_fault_handler(
@@ -30,7 +30,7 @@ lazy_static! {
         unsafe {
             idt.double_fault
                 .set_handler_fn(test_double_fault_handler)
-                .set_stack_index(blog_os_workspace::gdt::DOUBLE_FAULT_IST_INDEX);
+                .set_stack_index(wontonOS::gdt::DOUBLE_FAULT_IST_INDEX);
         }
 
         idt
@@ -45,7 +45,7 @@ pub fn init_test_idt() {
 pub extern "C" fn _start() -> ! {
     serial_print!("stack_overflow::stack_overflow...\t");
 
-    blog_os_workspace::gdt::init();
+    wontonOS::gdt::init();
     init_test_idt();
 
     // trigger a stack overflow

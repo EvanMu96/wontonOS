@@ -1,18 +1,18 @@
 #![no_std]
 #![no_main]
 #![feature(custom_test_frameworks)]
-#![test_runner(blog_os_workspace::test_runner)]
+#![test_runner(wontonOS::test_runner)]
 #![reexport_test_harness_main = "test_main"]
 
 extern crate alloc;
 
 use core::panic::PanicInfo;
-use blog_os_workspace::{memory, println, allocator};
+use wontonOS::{memory, println, allocator};
 use bootloader::{BootInfo, entry_point};
 use x86_64::VirtAddr;
 use x86_64::structures::paging::Page;
 use alloc::{boxed::Box, vec, vec::Vec, rc::Rc};
-use blog_os_workspace::task::{Task, executor, keyboard};
+use wontonOS::task::{Task, executor, keyboard};
 
 entry_point!(kernal_main);
 
@@ -33,7 +33,7 @@ async fn example_task() {
 fn kernal_main(boot_info: &'static BootInfo) -> ! {
     println!("Hello World{}", "!");
 
-    blog_os_workspace::init();
+    wontonOS::init();
     
     let phys_mem_offset = VirtAddr::new(boot_info.physical_memory_offset);
 
@@ -83,7 +83,7 @@ fn kernal_main(boot_info: &'static BootInfo) -> ! {
     executor.spawn(Task::new(keyboard::print_keypresses())); // spawn a task for keyboard event
     executor.run();
     
-    //blog_os_workspace::hlt_loop();
+    //wontonOS::hlt_loop();
 }
 
 // write a user-define panic handler when use no_std
@@ -92,12 +92,12 @@ fn kernal_main(boot_info: &'static BootInfo) -> ! {
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
     println!("{}", info);
-    blog_os_workspace::hlt_loop();
+    wontonOS::hlt_loop();
 }
 
 // our panic handler in test mode
 #[cfg(test)]
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
-    blog_os_workspace::test_panic_handler(info);
+    wontonOS::test_panic_handler(info);
 }
