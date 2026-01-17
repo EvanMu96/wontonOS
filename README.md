@@ -5,10 +5,10 @@ A repo to learn Rust and basic OSDev.
 
 ## Build
 
-To build this naive operating system, your should install the lastest nightly rust toolchain, including rust-src and llvm-tools-preview components.
+To build this naive operating system, you should install the latest nightly Rust toolchain, including rust-src and llvm-tools-preview components.
 
 ```bash
-> rustup toochain install nightly
+> rustup toolchain install nightly
 > rustup component add rust-src
 > rustup component add llvm-tools-preview
 ```
@@ -19,7 +19,7 @@ To check your current rust toolchain type and version, you can use command
 > rustc -Vv
 ```
 
-Moreover, to run the os in a virtual machine, you should install qemu with x86 system sypport
+Moreover, to run the OS in a virtual machine, you should install QEMU with x86 system support
 
 ```bash
 > sudo apt-get install qemu qemu-system-x86
@@ -31,13 +31,13 @@ and install bootimage by cargo
 > cargo install bootimage
 ```
 
-Then, try testing all unit test
+Then, try testing all unit tests
 
 ```bash
 > cargo test
 ```
 
-To boot and check screen printing
+To boot and check screen output
 
 ```
 > cargo run
@@ -47,4 +47,3 @@ use any of VNC clients to connect 5900 port for monitoring.
 
 ## Reference
 https://os.phil-opp.com/
-
